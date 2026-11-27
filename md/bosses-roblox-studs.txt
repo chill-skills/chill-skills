@@ -1,0 +1,26 @@
+---
+name: bosses-roblox-studs
+description: Four ready stud/LEGO-style Roblox bosses (Yeti, Tiburon/shark, Tiburon Robot, Kraken) built in Blender by code and exported as Luau data (bones, boxes, colors) plus baked animation clips, with a builder, an animator and a layered VFX example. Use when the user wants to put one of these bosses in a Roblox game, animate it, add VFX on its key frames, or rebuild/modify it in Blender.
+---
+
+# Bosses Roblox Studs
+
+Four stud-style bosses exported as DATA (no meshes, no uploaded assets). Read `LEEME_PARA_IA.txt` first: it is the full guide (in Spanish) and its rules are the user's rules.
+
+## Contents
+- `_comun/ModelBuild.luau` builds a model from `<Name>Data`; `_comun/ModelAnimator.luau` plays clips (with scale support).
+- Per boss folder: `<Name>Data.luau` (bones + boxes + colors), `<Name>Clips.luau` (baked clips, 30 fps, keys every 2 frames), `<name>.json` (same data for a three.js viewer), `blender_scripts/` (build, animate, export inside Blender), `INFO.txt` (size, bones, VFX key frames).
+- `Yeti/YetiFX.luau` is the reference for layered VFX (one RenderStepped, `job(delay, dur, setup)`, effects following bones).
+
+## Use in Roblox (minimum)
+1. Put `<Name>Data`, `<Name>Clips`, `ModelBuild`, `ModelAnimator` in ReplicatedStorage as ModuleScripts.
+2. Build: `local model = require(ModelBuild)(require(Data), CFrame.lookAt(pos, target), "Kraken"); model.Parent = workspace`
+3. Animate on the CLIENT: `local anim = ModelAnimator.new(model, require(Data), require(Clips)); anim:Play("Idle", true)` and call `anim:Step(dt)` every RenderStepped. `anim:Frame()` gives the current 30 fps frame for timing VFX.
+
+## Rules that matter
+- Axes: Blender (x, y, z) -> Roblox (-x, z, y); model front is -Z. Scale is already applied (studs).
+- Animate by writing `Motor6D.Transform`; the root bone also carries the clip translation. Linear interpolation, 0.2 s fades.
+- `Script.Source` limit is 200,000 characters: split `KrakenClips` per clip if it does not fit.
+- Style: real studs on all faces, nothing floating or z-fighting, light from above, Neon only on small saturated pieces (the game uses Bloom), VFX bodies in ForceField, PointLight brightness <= 3, short and subtle screen effects.
+- VFX key frames are listed in each `INFO.txt` (e.g. Yeti Smash impact f31, Kraken Slam impact f30).
+- The user tests in Play themselves: leave everything installed and give a short Spanish list of what to try.

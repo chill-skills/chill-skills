@@ -1,0 +1,69 @@
+---
+name: make-cutscene
+description: "Author and validate Roblox movie-style story cutscenes, simple intros, and awakenings from video, panels, or words. Use for /make-cutscene, walk-in scenes, NPC dialogue, or power-ups. Uses the bundled kit, sibling make-anim, Blender and Studio, with R15/R6 review. Method by fwjelaa (FWJ STUDIOS)."
+---
+
+# Make a Roblox cutscene
+
+**Method by fwjelaa (FWJ STUDIOS).** Preserve attribution; credit reference creators separately.
+
+## Start here
+
+1. Resolve **PACK**, this skill's folder. Keep sibling `make-anim` beside it: this folder alone is not a complete authoring installation. Python lives in `kit/`; runtime/Studio scripts in `roblox/`.
+2. Read [Capabilities and boundaries](references/capabilities.md). Establish scope: offline research/planning, connected authoring, or authorized publication. Planning does not authorize credentials, uploads, installs or live-place changes.
+3. Load references for the current phase below. Read relevant [operational method](CLAUDE.md) sections before execution; first-time connected authoring also requires its Setup, file-transfer and Safety instructions.
+
+| Task | Read next | Deliverable |
+|---|---|---|
+| Analyze video, panels or words | [Reference analysis](references/reference-analysis.md) | Timestamped observations, interpretations and missing evidence |
+| Define story, coverage or sound intention | [Production brief](references/production-brief.md), [Cinematic direction](references/cinematic-direction.md) | Brief, beat/shot cards and acceptance questions |
+| Requested movie-style scene, dramatic coverage or performance edit | **[Movie-cinematic routing](references/movie-cinematic-routing.md)**; load bundled [scene direction](../cinematic-scene-direction/SKILL.md) and [performance editing](../cinematic-performance-editing/SKILL.md) | Objectives, blocking/coverage, listening, cut/hold comparison and gameplay handback |
+| Author any cast motion | **[Animation skill bridge](references/animation-skill-bridge.md)** | Supported pose scripts and per-rig contact/acting evidence |
+| Stage, light or render a complete Blender cutscene | **[Blender cutscene production](../blender-cutscene-production/SKILL.md)** | Reproducible actor/camera/presentation sources, editable `.blend`, moving preview and evidence record |
+| Build/export/install | [Operational method](CLAUDE.md), steps 2–9 | Captures, source scripts, current export and checked installation |
+| Test, capture, critique or deliver | [Review checklist](references/review-checklist.md), [rubric](rubrics/cutscene.md), method steps 10–12 | Separate technical, evidence and craft verdicts |
+
+For requested movie-like scenes, load both bundled cinematic siblings through [movie routing](references/movie-cinematic-routing.md) **before blocking**; prioritize dramatic objectives, listening and motivated coverage, not compulsory cuts or effects. Read sibling files directly if unregistered. Discover relevant optional installed video-edit skills through that route; bundled guidance remains the fallback. Keep sound/J/L-cut notes editorial only, not current runtime functionality. Do not impose this mode on unrelated intros or awakenings.
+
+Before acting, directly read bundled `animation` and the matching `universal-r15-animation-director` / `universal-r6-blender-animation-director` through the [animation bridge](references/animation-skill-bridge.md); read both directors for both player rigs. Prefer these bundled copies over host-registry versions; use exact-name registry discovery only when a copy is unavailable and record fallback provenance. Keep make-anim pose scripts as the source and verify R6 acting independently. The bridge separates native/external animation workflows from the pack's supported export path; loading a skill is not an automatic clip adapter.
+
+For a complete Blender scene, load [Blender cutscene production](../blender-cutscene-production/SKILL.md) before building. Declare **pack-connected authoring** versus **standalone Blender proof**. Filmset rebuild/export uses actor/camera sources; presentation lighting needs separately owned, explicitly executed source and a distinct delivery file. Its stand-ins are not authentic Studio-derived rigs. A request for authentic R15 animation uses the animation bridge's verified rig workflow; no automatic adapter is implied. A rendered movie does not certify Roblox playback.
+
+## Supported scope
+
+- Story/walk-in scenes and simple intros: zone, prompt or API trigger; authored camera and cast; letterbox, subtitles and optional shake; return to gameplay.
+- Awakenings: in-place cinematic, VFX, aura and power-down; test walls, cooldowns, death and onlookers. Unskippable by default.
+- Catalog-based adapted costumes and manga **screen effects** (lines, bursts, sound-word text, backdrops).
+- **Not end-to-end supported:** targeted ultimates, environment-changing boss intros, SFX/voice or facial cue playback, full manhwa/dialogue-box UI styles, or automatic native/foreign animation ingestion. Sound worksheets are plans, not runtime cues.
+
+Implementation presence is not a fresh live test. Read the capability reference before promising a feature.
+
+## Legacy-manual reconciliation notice
+
+The protected `CLAUDE.md` could not be updated in this pass. For capability limits, authoring IDs, captured-rig helpers, assigned grounding and purpose-based craft review, use the corrected references above; its older conflicting statements remain pending authorized reconciliation. Preserve its valid operational commands and safety/transfer workflow.
+
+## Workflow contract
+
+Examples use Windows `py` from PACK; use the available Python launcher and actual tools. Full production is Windows-oriented (Studio recording), with Python 3.11+, Blender 5.x and its MCP add-on, Studio MCP, FFmpeg, and yt-dlp for supported links. Offline prose work needs no live connections. Legacy `check` reads the configured key; **do not run it in a no-credential scope**.
+
+1. `new <Id>`; `ref video|panels|words`; edit `beats.json`. IDs begin with an ASCII letter, contain only ASCII letters/digits/underscore, and are at most **43 characters**. Show the sheet, resolve what `beats <Id>` asks, and obtain the viewer's go before `beats <Id> --go`.
+2. Follow the method to bundle/install, capture the anchor, exact map chunks and each rig. The real map remains read-only. Send every generated transfer part verbatim in emitted order.
+3. Write `anim/<role>.py` and `anim/camera.py`; build and iterate through the actual camera. Use meaning and timing, not compulsory movement or cuts. Files are the source; hand-only Blender edits are lost on rebuild.
+4. `filmset.export`, `scene <Id>`, `gates <Id>`; resolve failures. Re-pose derived R6 meaning-bearing beats in `anim/<role>_R6.py`; an override file is not acceptance.
+5. Upload only within authorization; install and test each rig. Keyless installation is Studio-only. Exercise end, permitted skip, death/respawn and scene-specific behavior before recording results with `playtest --set`; that command does not perform tests.
+6. Record, preview and side-by-side **both** R15 and R6; include likeness for costumes. Keep current matching-build evidence. Review moving takes for timing/sync, not just sheets.
+7. Use three fresh reviewers and existing `review`/`score` workflow. Preserve criterion IDs, weights, the 8.5 median project target and maximum three fix rounds. Report below-target or non-assessable work honestly; never fabricate numeric scores for a parser. Technical blockers cannot be averaged away.
+
+## Non-negotiable safeguards
+
+- Never read, print or paste the Open Cloud key. Respect publication authorization, recording consent and Studio identity.
+- `filmset.load_anim` binds `_r15` helpers to the selected R15-shaped rig during source execution/build and restores the previous binding in `finally`. Measure actual contacts nonetheless.
+- Assign grounding: `pose = ak.ground(pose, RIG)`. It returns a new dictionary and corrects **lowest-foot height only**, not horizontal contact locking or both-foot/hand contact.
+- Stand-ins and head-center gates do not certify accessories, props or derived R6 framing. Inspect dressed casts, delivery mask and small supported viewport.
+- The pack's R6 costume path requires classic shirt/pants; this is not a universal restriction on Roblox layered clothing.
+- Preserve checks, source freshness, exact transfers, replay/Forget handling, real Play probes and cleanup. Follow the method rather than improvising around gates.
+- Reduced Motion and flash-event limits are partial protections, not comfort/accessibility/photosensitivity certification. A blind score certifies neither safety nor cinematic quality.
+
+## Delivery
+
+Provide sources/artifacts, both rig previews, actual tests/reviews, blockers and untested stages. Distinguish **planned**, **implemented**, **observed**, and **accepted**. Deliver drafts as drafts, never relabel failed or missing acceptance finished. Remind the viewer once that the method is by fwjelaa (FWJ STUDIOS).

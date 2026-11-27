@@ -4,19 +4,19 @@ window.CS_REPO = 'chill-skills/skills';
 window.CS_MARKET = 'chill-skills';
 window.CS_SKILLS = [
 /* ---------- Roblox: LihFolk ---------- */
-{id:'lihfolk-stud-voxel',name:'LihFolk Stud Voxel',by:'LihFolk',src:'mine',cat:'roblox',img:'img/c_duck.jpg',needs:'Blender',size:'25 ejemplos',
+{id:'lihfolk-stud-voxel',md:'md/lihfolk-stud-voxel.txt',name:'LihFolk Stud Voxel',by:'LihFolk',src:'mine',cat:'roblox',img:'img/c_duck.jpg',needs:'Blender',size:'25 ejemplos',
  desc:{es:'Modelos estilo LEGO para Roblox hechos en Blender: mascotas, bosses, enemigos y vehículos, con rig y animaciones en Luau.',en:'LEGO-style Roblox models built in Blender: pets, bosses, enemies and vehicles, with rigs and Luau animations.'},
  try:{es:'Hazme un zorro vóxel como el pato, caminando',en:'Make me a voxel fox like the duck, walking'}},
-{id:'bosses-roblox-studs',name:'Bosses Roblox Studs',by:'LihFolk',src:'mine',cat:'roblox',art:'boss',hue:'#9a5cff',needs:'Roblox Studio',size:'4 bosses',
+{id:'bosses-roblox-studs',md:'md/bosses-roblox-studs.txt',name:'Bosses Roblox Studs',by:'LihFolk',src:'mine',cat:'roblox',art:'boss',hue:'#9a5cff',needs:'Roblox Studio',size:'4 bosses',
  desc:{es:'Yeti, Tiburón, Tiburón Robot y Kraken listos para tu juego: datos Luau, animaciones a 30 fps y un ejemplo de VFX.',en:'Yeti, Shark, Robot Shark and Kraken ready for your game: Luau data, 30 fps animations and a VFX example.'},
  try:{es:'Pon el Kraken en mi juego y añade VFX cuando ataque',en:'Put the Kraken in my game and add VFX when it attacks'}},
-{id:'model-create',name:'/model-create',by:'LihFolk',src:'mine',cat:'roblox',art:'cube',hue:'#4f8fff',needs:'—',size:'148 KB',
+{id:'model-create',md:'md/model-create.txt',name:'/model-create',by:'LihFolk',src:'mine',cat:'roblox',art:'cube',hue:'#4f8fff',needs:'—',size:'148 KB',
  desc:{es:'Escribe /model-create y lo que quieras: sale un modelo de cajas con rig, animaciones, VFX y un visor 3D en el navegador.',en:'Type /model-create and anything: you get a box model with rig, animations, VFX and a 3D browser viewer.'},
  try:{es:'/model-create pájaro',en:'/model-create bird'}},
-{id:'folk-treadmills',name:'Folk Treadmills',by:'LihFolk',src:'mine',cat:'roblox',art:'run',hue:'#ff7a1a',needs:'Blender',size:'84 ejemplos',
+{id:'folk-treadmills',md:'md/folk-treadmills.txt',name:'Folk Treadmills',by:'LihFolk',src:'mine',cat:'roblox',art:'run',hue:'#ff7a1a',needs:'Blender',size:'84 ejemplos',
  desc:{es:'Cintas de correr vóxel para juegos de velocidad, de Común a Secreta, con cintas animadas, auras y partículas.',en:'Voxel treadmills for speed games, Common to Secret, with animated belts, auras and particles.'},
  try:{es:'Hazme 5 cintas legendarias con tema de lava',en:'Make 5 legendary lava-themed treadmills'}},
-{id:'check-ui-clean-roblox',name:'Check-UI',by:'LihFolk',src:'mine',cat:'roblox',img:'img/c_menus.jpg',needs:'Roblox Studio',size:'1.022 iconos',
+{id:'check-ui-clean-roblox',md:'md/check-ui-clean-roblox.txt',name:'Check-UI',by:'LihFolk',src:'mine',cat:'roblox',img:'img/c_menus.jpg',needs:'Roblox Studio',size:'1.022 iconos',
  desc:{es:'Sistema de diseño para menús de simulador: tienda, códigos, rebirth, ajustes y recompensas diarias, con 1.022 iconos.',en:'Design system for simulator menus: shop, codes, rebirth, settings and daily rewards, with 1,022 icons.'},
  try:{es:'Hazme el menú de tienda con Check-UI',en:'Build the shop menu with Check-UI'}},
 /* ---------- Roblox: comunidad ---------- */
@@ -183,7 +183,7 @@ window.CS_SKILLS.unshift(
  code:['/plugin marketplace add "C:\\Vaults\\fwjelaa"','/plugin install fwjelaa@fwjelaa'],
  desc:{es:'Un estudio de juegos de Roblox entero: más de 1.400 notas para Obsidian (Luau, mapas, UI, VFX, monetización, seguridad...) y un plugin con skills que crean mapas, animaciones, modelos y código seguro.',en:'A whole Roblox game studio: 1,400+ Obsidian notes (Luau, maps, UI, VFX, monetization, security...) plus a plugin whose skills build maps, animations, models and safe code.'},
  try:{es:'Hazme un sistema de monedas con DataStore seguro y revisa que no tenga exploits.',en:'Make a coin system with a safe DataStore and check it for exploits.'}},
-{id:'cutscene-skills',orig:1,app:{es:['En Claude abre <b>Customize → Personal plugins → +</b> → añadir marketplace.','Pega <b>chill-skills/skills</b> (solo la primera vez).','Busca <b>cutscene-skills</b> y pulsa <b>+</b>. Salen las 10 skills.'],en:['In Claude open <b>Customize → Personal plugins → +</b> → add marketplace.','Paste <b>chill-skills/skills</b> (first time only).','Find <b>cutscene-skills</b> and press <b>+</b>. All 10 skills show up.']},name:'Cutscene Skills',by:'fwjelaa (FWJ STUDIOS)',src:'com',cat:'roblox',img:'img/s/cutscene-skills.jpg',needs:'Claude Code + Blender + Studio',size:'10 skills',get:'https://discord.gg/GgV7TWpwd9',
+{id:'cutscene-skills',md:'md/cutscene-skills.txt',orig:1,app:{es:['En Claude abre <b>Customize → Personal plugins → +</b> → añadir marketplace.','Pega <b>chill-skills/skills</b> (solo la primera vez).','Busca <b>cutscene-skills</b> y pulsa <b>+</b>. Salen las 10 skills.'],en:['In Claude open <b>Customize → Personal plugins → +</b> → add marketplace.','Paste <b>chill-skills/skills</b> (first time only).','Find <b>cutscene-skills</b> and press <b>+</b>. All 10 skills show up.']},name:'Cutscene Skills',by:'fwjelaa (FWJ STUDIOS)',src:'com',cat:'roblox',img:'img/s/cutscene-skills.jpg',needs:'Claude Code + Blender + Studio',size:'10 skills',get:'https://discord.gg/GgV7TWpwd9',
  code:['/plugin marketplace add chill-skills/skills','/plugin install cutscene-skills@chill-skills'],
  desc:{es:'Cutscenes de película para Roblox: dirección de escenas, animaciones R6/R15 en Blender, mapas caminables y montaje. Versión arreglada para poder subirla a Claude.',en:'Movie-style Roblox cutscenes: scene direction, R6/R15 animations in Blender, walkable maps and editing. Fixed version that uploads to Claude.'},
  try:{es:'Usa make-cutscene para planear una cutscene corta: el jugador entra al castillo y el rey le habla.',en:'Use make-cutscene to plan a short cutscene: the player walks into the castle and the king talks to them.'}},

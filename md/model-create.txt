@@ -1,0 +1,73 @@
+---
+name: model-create
+description: Create boxy voxel 3D models for Roblox with a joint rig, animations and VFX, then export a browser viewer, Roblox Luau modules and (optionally) Blender .blend/.glb. Use when the user types /model-create followed by a thing (e.g. /model-create bird) or asks for a boxy/voxel/stud Roblox model.
+---
+
+# /model-create [thing]
+
+Builds a 3D model **made only of boxes** (Roblox voxel/stud style) with a **rig per joint**, **animation clips** and **VFX**. Outputs:
+
+1. a **viewer** `.html` that opens in any browser (orbit, 4 views, clips, pixel grain + outline);
+2. **Roblox** modules (`<Name>Data.luau`, `<Name>Clips.luau`) plus a runtime that builds and animates them;
+3. optionally **Blender** `.blend` + `.glb` with all animations, if a Blender MCP is connected.
+
+Example: `/model-create bird` → a boxy bird with Idle / Peck / Flap.
+
+## Files in this skill
+- `scripts/studmodel.py`: the library (building, rig, clips, checks, export, viewer, Blender script).
+- `scripts/template_bird.py`: a complete working example. **Start every model from it.**
+- `references/style.md`: how the models must look. **Always read it.**
+- `references/rig.md`, `references/animations.md`, `references/effects.md`, `references/pipeline.md`.
+- `roblox/`: StudBuild, ModelAnimator, ClipFx, ModelDemo, grain_pixel.png.
+- `viewer/viewer_template.html`: used by `export_viewer()`.
+
+## If the user brings a model JSON (e.g. exported from Claude Design)
+```python
+from studmodel import Model, export_viewer, render_views
+M = Model.from_json("Thing.json")   # rigged or static, flat or nested boxes
+M.check(); M.export("out"); render_views(M, "out/Thing_views.png"); export_viewer([M], "out/Thing_viewer.html")
+```
+Fix it only if the check fails or the user asks for changes. Then continue from step 6 (Blender) and step 7 (deliver).
+
+## Steps
+1. **Read** `references/style.md` and `references/rig.md`. Read `animations.md` and `effects.md` when you write the clips.
+2. **Understand the request.**
+   - If the user gave a reference image or sheet (front / 3/4 / side / back), follow it exactly.
+   - If something essential is missing, ask **once**, briefly: what it is (NPC, mob, boss, prop, vehicle), whether it uses a real Roblox head, its size, its actions, and which parts will be scripted separately.
+   - If nobody answers, choose sensible defaults and state them as assumptions.
+3. **Write the model script.** Copy `scripts/template_bird.py` to a work folder as `<name>_rig.py`, keep `studmodel.py` next to it, and replace the bird:
+   - Palette: 3 shades of the main color (light on top → dark at the bottom), 1–2 darks, at most 1 small neon.
+   - Bones per joint, every box on one bone, pivot where it bends, `.L/.R` side names. Build the right side and mirror it.
+   - Shapes: a few big boxes for the silhouette; stepped layers for round things; plates for hair or feathers; `pipe()` for tubes; `stepped_disc()` for wheels; `attach_point()` for anything a script will need.
+   - Clips by type (see the `animations.md` catalog):
+     - NPC: Idle, Walk, Sleep, poses.
+     - Mob or boss: attacks in phases with markers.
+     - Vehicle: Idle vibration, Drive, turns, Accelerate, Brake.
+     - Prop: subtle Idle or none.
+   - Every clip has a start and an end: one-shots start and end at the base pose; loops close perfectly. Always anticipation → action → settle. Use `ground=True` for characters.
+   - Add the VFX that fit (`effects.md`): smoke, puff, vortex, FredokaOne text, scale-animated bubbles.
+4. **Run** `python3 <name>_rig.py <out>`. It prints the check, exports JSON + Luau + Blender script, renders `<Name>_views.png` and writes `<Name>_viewer.html`.
+5. **Fix until clean.**
+   - Target: `overlaps 0` and `floating 0`; lowest point 0 in ground clips; no clashes between non-adjacent bones (an intentional one, like a claw entering a window, is OK if you say so).
+   - **Look at the PNG** (open the image) and fix anything that doesn't match the reference.
+   - For hard reach poses, optimize the joint angles with `scipy.optimize.minimize` (Powell): cost = distance + direction + clash penalty.
+6. **Blender (only if a Blender MCP tool is available).**
+   - Put `<Name>.json` in a folder on the computer that runs Blender.
+   - Run the contents of `blender_build_<Name>.py` through the Blender MCP's code tool, with `%FOLDER%` replaced by that folder.
+   - It saves `<Name>.glb` and `<Name>.blend` there.
+   - Without Blender, skip this step: the viewer and the Roblox files are enough.
+7. **Deliver** a folder with `<name>_rig.py`, `<Name>.json`, `<Name>Data.luau`, `<Name>Clips.luau`, `<Name>_viewer.html`, `<Name>_views.png` (+ `.glb` / `.blend`), a copy of `roblox/`, and a short `README.md`. The README covers: size in studs, boxes, bones, clips, attachments, markers, and how to install in Roblox (`references/pipeline.md`).
+8. **Reply briefly:**
+   - What was made: size, boxes and bones.
+   - The clips, one line each, and the VFX.
+   - The check result.
+   - Where everything is.
+   - The assumptions, and what wasn't tested (the user tests in Roblox Play).
+
+## Non-negotiables
+- Boxes only. No studs on the model; the look is pixel grain + light outline.
+- 1 unit = 1 stud, a player is 5 studs, Y up, front = −Z, pivot at the ground center.
+- Boxes touch but never overlap; nothing floats.
+- No text or signs on the model (that goes in a floating label in the game).
+- Real Roblox head = don't model it; leave a `head` bone at the neck.
+- Scripted parts (grabbing arms, turrets) = separate models with their own rig, mounted on an Attachment socket.

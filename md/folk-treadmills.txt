@@ -1,0 +1,108 @@
+---
+name: folk-treadmills
+description: Build voxel treadmills for Roblox speed / +1 simulator games in headless Blender - themed heads, rarity tiers (Common to Secret), seamless scrolling belts, hinge-pivoted animated parts, auras and particles for high rarities - and export them as Roblox-ready GLBs with a Motor6D rig, client animator and VFX scripts. Ships 84 rebuildable examples. Use whenever the user asks for a treadmill, running machine, speed trainer or training pad for a speed game, more treadmills, a treadmill set, rarities, or treadmill animation or VFX, even if Blender is not named.
+---
+# Folk Treadmills
+
+> Proprietary, see `LICENSE.md`. Treadmills you make with it are yours. Version history: `CHANGELOG.md`.
+
+Look at `references/images/set_1.jpg` to `set_4.jpg` (all 84 examples) and `references/images/vfx_1.jpg` to `vfx_5.jpg` (their effects) before designing. `gallery/<Name>.jpg` = full, front and back of each one; `animated_1.gif` to `animated_4.gif` = all 84 moving with effects.
+
+**Ready-made models (not included in this copy; rebuild them all with `build.py` without a `designs.py`):** `models/kit/*.glb` (every part of all 84, hinge pivots), `models/treadmill_set.blend` (rigged and animated; append the scene), `models/belts`, `models/textures`, `models/animdata.json` (hinges), `models/TreadmillSet?KitPrep.lua` (collision fidelity). Game scripts + data: `roblox_src/`.
+
+## Rules
+- Original designs only. Never copy another game's treadmill, name or creature.
+- No text, letters, digits, flags, plus / cross shapes, religious symbols, or halo rings above figures.
+- A new design needs its own head silhouette, rail, belt pattern and moving part. Never a recolour of an example.
+- High rarity = richer silhouette and effects, not more triangles. Typical 1.5k-14k triangles, 35k for the biggest showpieces, aim for 20k or less per mesh.
+- VFX = particles, comets and lights round the head. **Nothing on the floor** (no sigils, rings, puddles, shockwaves) and nothing hanging in the air beside the lane (`SIDE_FX` in ts_fx.py is off by default).
+- Build headless. In a Blender the user has open, only append the scene from the finished .blend. Import into Studio only when asked; never press Play.
+
+## Workflow
+1. New project folder: copy `scripts/*`, `roblox_src/` and `template/designs.py` into it, and `assets/textures_vfx/` and `assets/fxkit.blend` beside them. Needs Blender 5.x (`BLENDER` = its path) and Python 3 with numpy + Pillow (`py` = your Python command).
+   `build.py` builds only `designs.SET` while `designs.py` is there; without it, all 84 examples.
+2. Design each treadmill in `designs.py` (below). Read 2-3 example functions of the same rarity first (`ts_kit.py`, `ts_more.py`, `ts_third.py`).
+3. Build (STEP=1 renders all 24 frames, which gif.py needs; `-- norender` or `-- only=A,B` to iterate. `only` skips saving the .blend and json):
+   ```bash
+   STEP=1 "$BLENDER" -b --factory-startup --python build.py     # wants BUILD_OK, no EMPTY PART, miss 0.000
+   py gif.py                                                     # previews/animated.gif + poses.png: LOOK at them
+   ```
+   Fix: head unreadable at thumbnail size, floating cells, parts clipping at the far pose, EMPTY PART, unintended symmetry loss.
+4. VFX (add rows to `EMIT` in `ts_fx.py`, run `"$BLENDER" -b treadmill_set.blend --python fx_points.py`, then preview with Roblox blending and depth):
+   ```bash
+   "$BLENDER" -b treadmill_set.blend --python fx_render.py && py fx_comp.py sheet && py fx_comp.py gif     # previews/vfx_N.png + vfx.gif (STEP=6; BS in fx_comp = STEP) (quick look)
+   ```
+5. Data + export:
+   ```bash
+   py mkdata.py       # roblox_src/TreadmillData.lua + collision_rules.json
+   "$BLENDER" -b treadmill_set.blend --python roblox_export.py -- --name Treadmills --hero . --float-ok . --rock .     # wants EXPORT_OK
+   rm -f roblox/*_Palette.png; cp roblox_src/* roblox/; cp -r textures_vfx belts roblox/
+   ```
+   Every `part` in `animdata.json` must have `roblox/kit/<part>.glb`. Warnings about belt UVs, belts at y 1.83 and off-centre pivots are expected.
+
+## Design function
+Cells of 0.3 stud; x mirrored (paint with |x| = `g.X`, use `g.X0` only to break symmetry); +Z entry end, -Z head end; y 6 = deck.
+Shared layout: belt |x| < 18, z -32..64, y 6-8 (keep clear, cut automatically); roller z 68; rails x 19-28, z -30..66; head z -56..-24, up to y ~96. Use even cells (2-cell blocks).
+Colours: `ramp + step 0-5` (`'gold3'`), glow `'*lava'`. Ramps and glows are in `kitlib.py`.
+
+| Helper | Makes |
+|---|---|
+| `base(chassis, side, trim, stud=, ro=(roller, rib, hub))` | grid + chassis + bed + roller; returns `g` |
+| `steprail(g, wall, trim)` -> (mask, heights) | stepped side rail |
+| `cheeks(g, c)`, `throat(g, cols, glow, z)` | head sides; glowing tunnel (call last, it cuts the opening) |
+| `bx`, `sup` (superellipsoid), `disc`, `wheelx`, `log`, `gem`, `eyes`, `teeth`, `fronteeth`, `g.tube` | forms |
+| `g.re(mask, c)` | recolour existing cells (patterns, bands, spots) |
+| `g.bricks`, `g.scales`, `g.rivets`, `g.ramp` | calculated surface patterns |
+| `<name>_belt()` -> `belt(Name, a, b, seam, pattern, pitch)` with `chev(...)` | belt; the pattern must repeat within 144 cells |
+
+The belt function is named after the treadmill in lower case. End with `return fin(g, Name)` and add `(Name, Rarity, fn)` to `SET`.
+
+## Animals and characters (read `ts_v2.py` first)
+Build the WHOLE creature, not a head shell: front legs / chest arch over the tunnel (`torso`), a full body behind it (`big(...)` = grid back to z -104), paws on side decks (`pads`, `paw`), a tail, and a complete head above the tunnel with nothing covering the face.
+Readable in one second at thumbnail size: 2-3 identifying features exaggerated (mane, black eye patches, dorsal + tail fin, crest + snout, eight knees), real colours, eyes set INTO the face (`eye`: thin dark rim, white, iris, centred round pupil, sparkle; never a block standing out from the head; on the snout side limit z1), nose, mouth, ears.
+`ell` superellipsoid, `seg` / `path` limbs that are connected by construction, `front` paints or raises a 2D mask on the frontmost surface (set z0 / z1 so it does not land on the snout).
+
+## Side props (no blobs, no random cubes)
+Small props are sculpted in `ts_props.py` on their own 1-cell grid (0.3 stud steps; the body keeps 2-cell blocks) with lathes, curves and spheres, then placed by `RAILS[name]` (about 4 a side on a low curb). Each must read as one real thing from the runner's eye: tulip, melon slice, lantern, barrel, fish. Check with `rails.py` + `railsheet.py`. Over 450k triangles for a whole set: `halve.py` splits the export into parts of 22.
+
+Dark showpieces (`ts_v6.py`): a plain dark hall with glowing trim + ONE big sculpture on the fine grid (skull, helm, axe, hourglass, rift), added centred with x = 0 and a motion (`(kind, amp, speed, pivot dy)` or `mirror`).
+`ts_v7.py` adds `gate(kind)` (tapered, stepped, domed, hex, flared, ribbed, keep silhouettes: vary it, never the same box twice) and `coarse()` (snaps a heavy round sculpture to 2-cell blocks, about a quarter of the triangles). No 8-like, cross-like or menorah-like glow marks.
+
+## Faces and life
+`eye()` registers every eye (hand-made ones: `noteye`), and build.py makes a `<Part>Lids` mesh that rides on the same part: invisible, shown 0.13 s per blink by TreadmillAnimator (random gaps, sometimes twice). Parts named Head / HeadMid glance left and right with a nod (`look`). Check closed eyes with `BLINK=1` renders; lids must not overlap a raised brow.
+
+## Build quality checks
+- `build.py` prints `FLOAT` (pieces touching nothing) and removes stray bits up to 64 blocks (`REMOVED`). Only intended floaters may remain (steam, popcorn, shards, glitch blocks).
+- `ONLY=A,B "$BLENDER" -b treadmill_set.blend --python studio.py && py qasheet.py out.png abc A,B 6`: front, full and BACK close-ups. Look at every one.
+- Reject: slabs or open tunnels at the back (`rearwall` adds a framed panel, whitelist in build.py), detached arms / tips / lanterns, parts hanging off the deck, towers blocking the tunnel, plates that cover the face.
+
+## Animation
+`A[Name] = [(Part, mask, hinge in cells, motion, amp, speed, phase, mirrored)]`. Save masks while painting: `g.tags['Cap'] = mask`, then `tag('Cap')`.
+Motions: `spinX/Y/Z` (deg/s), `rockX/Y/Z` (deg), `flap`, `chomp` (jaw), `bob`, `jitter` (studs). `mirrored=True` makes `_L` / `_R`.
+One to four parts each; hinge at the real joint; overlapping gears need non-overlapping masks (`near`). Every treadmill also gets a spinning roller and a scrolling belt.
+
+## VFX (`ts_fx.py`)
+Read `references/vfx.md` first. Ready-made data for all 84 examples: `roblox_src/vfx_ready/` (four ModuleScripts).
+`light` (1-2), `orbits` (`O(radius, y, deg/s, tilt, width, colour, count)` comets with trails), `layers`: `glow` (back glow), `flames` (aura tongues), `motes` (`tex=` dot, bubble, shard), `twinkle`, `haze`, or `E(...)`.
+
+| Rarity | Budget |
+|---|---|
+| Common / Uncommon | 1-2 small ideas |
+| Rare / Epic | 2-3 layers, light |
+| Legendary | 3-4 layers, 1 light, rarely 1 comet set |
+| Mythic | 5 layers, 2 lights, 1-2 comet sets |
+| Secret | up to 6 layers, 2 lights, 2+ comet sets and one unique motion (inward pull, flicker, rainbow) |
+
+Keep emitters at y >= 9. Many soft overlapping tongues read as an aura; few hard ones read as droplets. Textures are our own (`fxtex.py`), white, tinted in game; never ship textures from other packs.
+
+## Roblox setup
+1. 3D Importer: `kit/*.glb` into `ServerStorage.TreadmillSetKit` (studs, keep the file origin as pivot: it is the hinge).
+2. `TreadmillData`, `TreadmillEffects`, `TreadmillPoints`, `TreadmillFloaters` + `TreadmillRig` ModuleScripts in ReplicatedStorage; `TreadmillAnimator` + `TreadmillVFX` LocalScripts in StarterPlayerScripts.
+3. Optional uploads: `belts/*.png` ids into `BeltImages` (else belts show but don't scroll), `textures_vfx/*.png` ids into `VFXImages` (else built-in textures).
+4. `Rig.Build(kit, "Phoenix", cf, workspace)`. Attributes: `Running`, `RunSpeed`; `model:SetAttribute("Burst", os.clock())` fires a burst. Backwards mesh: `Rig.YAW_FIX = 180`; belt wrong way: `BELT_DIR = -1`.
+
+## Studio-tested import (on request only)
+Blender upload add-on: one collection per treadmill = one upload (`upload_operator.RBX_OT_upload.upload(...)` with the collection; copies without parents or animation). `InsertService:LoadAsset` keeps exact scale, rotation and offsets (no yaw fix, export scale 0.01). Group the MeshParts by part name into kit Models, set `WorldPivot` to the hinge from animdata.json, re-mesh bodies with `CreateMeshPartAsync` + PreciseConvexDecomposition, use each belt mesh's TextureID as its `BeltImages` id.
+Verified by running the two client scripts on Heartbeat in Edit: joints, belt direction (`BELT_DIR = 1`), particles, comets. Seen in Play: belts scroll and carry at 16 studs/s.
+Lessons: writing `Rate` every tick stops emission (write real changes only); LightEmission 1 + white-hot colours wash to white in daylight (flames LE 0.35, Brightness 0.9); keep lights low or they paint the floor.
+StreamingEnabled: never cache Belt / Joints when the tag fires (they arrive later); look them up per frame, rig models Atomic. The Belt must be its own anchored part (not welded) to carry players.
